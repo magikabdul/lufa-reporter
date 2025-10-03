@@ -19,6 +19,9 @@ spring:
   jpa:
     show-sql: true
 
+telegram:
+  token: ${telegram-token:dummyToken}
+
 ---
 
 spring:

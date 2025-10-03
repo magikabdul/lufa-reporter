@@ -2,9 +2,9 @@ spring:
   application:
     name: lufa-reporter
   profiles:
-    active: shop
+    active: reporter
   webflux:
-    base-path: "/shop"
+    base-path: "/reporter"
   datasource:
     host: ${database-host:localhost}
     port: ${database-port:1433}
@@ -18,3 +18,12 @@ spring:
     enabled: on
   jpa:
     show-sql: true
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+  flyway:
+    enabled: false

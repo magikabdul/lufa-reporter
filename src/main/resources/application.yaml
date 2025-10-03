@@ -15,7 +15,7 @@ spring:
     url: ${flyway-url:localhost}
     user: ${database-user:dummyUser}
     password: ${database-password:dummyPassword}
-    enabled: on
+    enabled: true
   jpa:
     show-sql: true
 

@@ -1,4 +1,4 @@
-package cloud.cholewa.lufa.reporter.config;
+package cloud.cholewa.reporter.config;
 
 import io.r2dbc.spi.ConnectionFactories;
 import io.r2dbc.spi.ConnectionFactory;

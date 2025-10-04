@@ -1,4 +1,4 @@
-package cloud.cholewa.lufa.reporter.telegram;
+package cloud.cholewa.reporter.telegram;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;

@@ -1,4 +1,4 @@
-package cloud.cholewa.lufa.reporter;
+package cloud.cholewa.reporter;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

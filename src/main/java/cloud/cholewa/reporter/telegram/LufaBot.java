@@ -1,6 +1,6 @@
-package cloud.cholewa.lufa.reporter.telegram;
+package cloud.cholewa.reporter.telegram;
 
-import cloud.cholewa.lufa.reporter.config.TelegramConfig;
+import cloud.cholewa.reporter.config.TelegramConfig;
 import io.github.natanimn.telebof.BotClient;
 import io.github.natanimn.telebof.filters.Filter;
 import lombok.RequiredArgsConstructor;

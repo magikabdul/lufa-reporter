@@ -11,11 +11,11 @@
 	</parent>
 
 	<groupId>cloud.cholewa</groupId>
-	<artifactId>lufa-reporter</artifactId>
+	<artifactId>reporter</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>lufa-reporter</name>
-	<description>lufa-reporter</description>
+	<name>reporter</name>
+	<description>reporter</description>
 	<url/>
 	<licenses>
 		<license/>

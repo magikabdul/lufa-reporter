@@ -20,7 +20,13 @@ spring:
     show-sql: true
 
 telegram:
-  token: ${telegram-token:dummyToken}
+  url: https://api.telegram.org
+  lufa:
+    token: ${telegram-token:dummyToken}
+    chatId: ${telegram-chatId:dummyChatId}
+  tre:
+    token: ${telegram-token:dummyToken}
+    chatId: ${telegram-chatId:dummyChatId}
 
 ---
 

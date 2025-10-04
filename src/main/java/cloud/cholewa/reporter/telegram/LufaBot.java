@@ -15,7 +15,7 @@ public class LufaBot {
     private final TelegramConfig telegramConfig;
 
     public void start() {
-        final BotClient bot = new BotClient(telegramConfig.getToken());
+        final BotClient bot = new BotClient(telegramConfig.getLufa().getToken());
 
         log.info("Bot started");
 

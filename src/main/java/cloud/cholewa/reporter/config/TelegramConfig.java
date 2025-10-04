@@ -1,13 +1,22 @@
 package cloud.cholewa.reporter.config;
 
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
-@Configuration
+@Setter
+@ConfigurationProperties(prefix = "telegram")
 public class TelegramConfig {
 
-    @Value("${telegram.token}")
-    private String token;
+    private String url;
+    private Vendor lufa;
+    private Vendor tre;
+
+    @Getter
+    @Setter
+    public static class Vendor {
+        private String token;
+        private String chatId;
+    }
 }

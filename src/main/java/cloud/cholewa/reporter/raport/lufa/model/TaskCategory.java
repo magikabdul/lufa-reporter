@@ -1,4 +1,4 @@
-package cloud.cholewa.reporter.raport.model;
+package cloud.cholewa.reporter.raport.lufa.model;
 
 public enum TaskCategory {
 

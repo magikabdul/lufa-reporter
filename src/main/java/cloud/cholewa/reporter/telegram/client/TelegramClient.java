@@ -15,11 +15,11 @@ import static cloud.cholewa.reporter.telegram.model.VendorName.LUFA;
 @RequiredArgsConstructor
 public class TelegramClient {
 
-    private final WebClient webClient;
+    private final WebClient telegramWebClient;
     private final TelegramConfig telegramConfig;
 
     public Mono<Void> sendMessage(final VendorName vendorName, final String message) {
-        return webClient
+        return telegramWebClient
             .get()
             .uri(uriBuilder -> uriBuilder
                 .path("bot" + getToken(vendorName))

@@ -12,7 +12,7 @@ public class AppConfig {
     private final TelegramConfig telegramConfig;
 
     @Bean
-    WebClient webClient() {
+    WebClient telegramWebClient() {
         return WebClient.create(telegramConfig.getUrl());
     }
 }

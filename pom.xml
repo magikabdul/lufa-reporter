@@ -41,6 +41,7 @@
 		<maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
 		<maven-tidy-plugin.version>1.4.0</maven-tidy-plugin.version>
 		<maven-versions-plugin.version>2.19.1</maven-versions-plugin.version>
+		<commons-lang3.version>3.19.0</commons-lang3.version>
 	</properties>
 
 	<dependencies>
@@ -89,6 +90,11 @@
 					<artifactId>guava</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>

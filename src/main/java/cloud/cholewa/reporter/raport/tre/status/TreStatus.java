@@ -10,4 +10,5 @@ import org.springframework.stereotype.Component;
 public class TreStatus {
 
     private boolean isStatusReported;
+    private boolean inProgress;
 }

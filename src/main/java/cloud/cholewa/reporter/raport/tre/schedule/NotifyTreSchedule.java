@@ -22,16 +22,39 @@ public class NotifyTreSchedule {
         log.info("Send notification to Tre with report request");
         treStatus.setStatusReported(false);
 
-        telegramClient.sendMessage(TRE, "Podaj informację o rzeczach które dzisiaj wykonałeś")
+        telegramClient
+            .sendMessage(
+                TRE, """
+                    Podaj informację o rzeczach które dzisiaj wykonałeś.
+                    Rozpocznij wprowadzanie raportu podając polecenie `/start`.
+                    """
+            )
             .subscribe();
     }
 
     @Scheduled(cron = "0 0/30 21-23 * * *", zone = "Europe/Warsaw")
     void resendNotification() {
-        if (!treStatus.isStatusReported()) {
+        if (!treStatus.isStatusReported() && !treStatus.isInProgress()) {
             log.info("Resend notification to Tre with report request while is was not reported today");
 
-            telegramClient.sendMessage(TRE, "Dzisiaj jeszcze nie zaraportowałeś wykonanych rzeczy")
+            telegramClient
+                .sendMessage(
+                    TRE, """
+                        Dzisiaj jeszcze nie zaraportowałeś wykonanych rzeczy.
+                        Rozpocznij wprowadzanie raportu podając polecenie `/start`.
+                        """
+                )
+                .subscribe();
+        } else if (treStatus.isInProgress()) {
+            log.info("Remainder notification to Tre the report is in progress");
+
+            telegramClient
+                .sendMessage(
+                    TRE, """
+                        Nie zakończyłeś wprowadzania raportu.
+                        Jeżeli chcesz przerwać wprowadzanie raportu, wpisz `/cancel`.
+                        """
+                )
                 .subscribe();
         }
     }

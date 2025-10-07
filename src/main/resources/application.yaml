@@ -1,6 +1,6 @@
 spring:
   application:
-    name: lufa-reporter
+    name: activity-reporter
   profiles:
     active: reporter
   webflux:

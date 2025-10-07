@@ -3,6 +3,7 @@ package cloud.cholewa.reporter.config;
 import io.r2dbc.spi.ConnectionFactories;
 import io.r2dbc.spi.ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactoryOptions;
+import io.r2dbc.spi.Option;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +39,7 @@ public class DatabaseConfig {
             .option(ConnectionFactoryOptions.DATABASE, database)
             .option(ConnectionFactoryOptions.USER, username)
             .option(ConnectionFactoryOptions.PASSWORD, password)
-            .option(ConnectionFactoryOptions.SSL, true)
+            .option(Option.valueOf("sslMode"), "REQUIRE")
             .build());
     }
 

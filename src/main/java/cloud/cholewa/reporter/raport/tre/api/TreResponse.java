@@ -11,6 +11,7 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TreResponse {
 
+    private String date;
     private String company;
     private String description;
     private int hours;

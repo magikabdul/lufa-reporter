@@ -47,6 +47,7 @@ public class TreService {
         return treRaportRepository.findAllByDate(LocalDate.of(year, month, 1))
             .doOnNext(entity -> log.info("Report found in database: {}", entity))
             .map(entity -> TreResponse.builder()
+                .date(entity.getCreated().toString())
                 .company(entity.getCustomer())
                 .description(entity.getDescription())
                 .hours(entity.getHours())

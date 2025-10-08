@@ -45,7 +45,7 @@ public class TreService {
 
     public Mono<List<TreResponse>> getReport(final int year, final int month) {
         return treRaportRepository.findAllByDate(LocalDate.of(year, month, 1))
-            .doOnNext(entity -> log.info("Report found in database: {}", entity))
+            .doOnNext(entity -> log.info("Report found in database: {}", entity.getCustomer()))
             .map(entity -> TreResponse.builder()
                 .date(entity.getCreated().toString())
                 .company(entity.getCustomer())

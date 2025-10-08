@@ -25,6 +25,7 @@ public class TreMessageHandler {
     private static final String HOURS = "hours";
     private static final String FIRSTNAME = "firstname";
     private static final String LASTNAME = "lastname";
+    private static final String NOTES = "notes";
     private static final String CONFIRM = "confirm";
 
     private final TreStatus treStatus;
@@ -109,6 +110,20 @@ public class TreMessageHandler {
         ctx.getStateData(message.chat.id).put(LASTNAME, message.text);
         raportContext.setSalesmanLastName(message.text);
         ctx.sendMessage(
+                message.chat.id, "Opcjonalnie podaj dodatkowe informacje.\nWpisz `n` jeżeli pomijasz ten krok.")
+            .parseMode(MARKDOWN).exec();
+        ctx.setState(message.chat.id, NOTES);
+    }
+
+    @MessageHandler(state = NOTES)
+    void handleNotes(final BotContext ctx, final Message message) {
+        log.info("Notes received: {}", message.text);
+        if (!message.text.equalsIgnoreCase("n")) {
+            ctx.getStateData(message.chat.id).put(NOTES, message.text);
+            raportContext.setNotes(message.text);
+        }
+
+        ctx.sendMessage(
                 message.chat.id,
                 String.format(
                     """
@@ -118,6 +133,7 @@ public class TreMessageHandler {
                         *Ilość godzin*: %s
                         *Imię handlowca*: %s
                         *Nazwisko handlowca*: %s
+                        *Dodatkowe informacje*: %s
                         
                         **Potwierdzenie zapisu (y/n)**
                         """,
@@ -125,7 +141,8 @@ public class TreMessageHandler {
                     ctx.getStateData(message.chat.id).get(DESCRIPTION),
                     ctx.getStateData(message.chat.id).get(HOURS),
                     ctx.getStateData(message.chat.id).get(FIRSTNAME),
-                    ctx.getStateData(message.chat.id).get(LASTNAME)
+                    ctx.getStateData(message.chat.id).get(LASTNAME),
+                    ctx.getStateData(message.chat.id).getOrDefault(NOTES, "Brak")
                 )
             )
             .parseMode(MARKDOWN).exec();

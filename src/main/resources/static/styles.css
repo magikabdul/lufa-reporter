@@ -149,14 +149,37 @@ nav a:hover {
   box-shadow: 0 0 0 3px rgba(242,107,33,0.25);
 }
 
-/* Remove number input spinners for cleaner look */
+/* Number input spinners: default hidden globally for cleaner look, but enabled and styled for #year and #month */
 .form-control input[type="number"] {
   -moz-appearance: textfield;
 }
 .form-control input[type="number"]::-webkit-outer-spin-button,
 .form-control input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
   margin: 0;
+}
+
+/* Re‑enable and style spinners specifically for year and month to match the dark theme */
+#year,
+#month {
+  appearance: textfield;           /* restore native controls */
+  -moz-appearance: none;      /* Firefox */
+  color-scheme: dark;         /* ensure arrows contrast on dark backgrounds */
+}
+#year::-webkit-inner-spin-button,
+#year::-webkit-outer-spin-button,
+#month::-webkit-inner-spin-button,
+#month::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  opacity: .85;               /* visible but subtle */
+  background: transparent;    /* blend with input background */
+  filter: invert(.9) saturate(.8); /* make default arrows light on dark */
+}
+#year:hover::-webkit-inner-spin-button,
+#year:hover::-webkit-outer-spin-button,
+#month:hover::-webkit-inner-spin-button,
+#month:hover::-webkit-outer-spin-button {
+  opacity: 1;
+  -webkit-appearance: auto;
 }
 
 /* Card helper (used on tre page) */

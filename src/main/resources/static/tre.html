@@ -5,12 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Trecom Reporter</title>
   <link rel="stylesheet" href="styles.css">
-<!--  <style>-->
-<!--    /* Borders for the TRE table */-->
-<!--    #tre-table { border: 1px solid #cbd5e1; border-collapse: collapse; }-->
-<!--    #tre-table th, #tre-table td { border: 1px solid #cbd5e1; padding: .5rem .75rem; }-->
-<!--    #tre-table thead th { background: #f8fafc; }-->
-<!--  </style>-->
 </head>
 <body class="tre-theme">
   <main class="container">
@@ -39,6 +33,7 @@
         <table id="tre-table" class="table" style="width: 100%; border-collapse: collapse;">
           <thead>
             <tr>
+              <th style="text-align:center;">Data</th>
               <th style="text-align:center;">Firma</th>
               <th style="text-align:center;">Opis</th>
               <th style="text-align:center;">Godziny</th>
@@ -97,6 +92,10 @@
         const frag = document.createDocumentFragment();
         rows.forEach(item => {
           const tr = document.createElement('tr');
+
+          const tdDate = document.createElement('td');
+          tdDate.textContent = item.date ?? '';
+          tr.appendChild(tdDate);
 
           const tdCompany = document.createElement('td');
           tdCompany.textContent = item.company ?? '';

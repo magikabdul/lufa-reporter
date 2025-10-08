@@ -30,6 +30,7 @@ public class NotifyTreSchedule {
                 TRE, """
                     Podaj informację o rzeczach które dzisiaj wykonałeś.
                     Rozpocznij wprowadzanie raportu podając polecenie `/start`.
+                    Jeżeli chcesz pominąć ten krok, wpisz `/skip`.
                     """
             )
             .subscribe();
@@ -37,6 +38,9 @@ public class NotifyTreSchedule {
 
     @Scheduled(cron = "0 0/30 21-23 * * *", zone = "Europe/Warsaw")
     void resendNotification() {
+        if (treStatus.getStatus() == null) {
+            return;
+        }
         if (!treStatus.getStatus().equals(REPORTED) && !treStatus.getStatus().equals(SKIPPED)) {
             log.info("Resend notification to Tre with report request while is was not reported today");
 

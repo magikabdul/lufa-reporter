@@ -1,5 +1,6 @@
 package cloud.cholewa.reporter.raport.tre.service;
 
+import cloud.cholewa.reporter.raport.tre.api.TreResponse;
 import cloud.cholewa.reporter.raport.tre.model.TreRaportContext;
 import cloud.cholewa.reporter.raport.tre.repository.TreRaportEntity;
 import cloud.cholewa.reporter.raport.tre.repository.TreRaportRepository;
@@ -9,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Locale;
 
 @Slf4j
@@ -38,5 +41,18 @@ public class TreService {
         }
 
         return treRaportEntity;
+    }
+
+    public Mono<List<TreResponse>> getReport(final int year, final int month) {
+        return treRaportRepository.findAllByDate(LocalDate.of(year, month, 1))
+            .doOnNext(entity -> log.info("Report found in database: {}", entity))
+            .map(entity -> TreResponse.builder()
+                .company(entity.getCustomer())
+                .description(entity.getDescription())
+                .hours(entity.getHours())
+                .salesman(entity.getSalesmanLastName() + " " + entity.getSalesmanFirstName())
+                .notes(entity.getNotes())
+                .build())
+            .collectList();
     }
 }

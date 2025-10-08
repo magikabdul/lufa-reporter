@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trecom Reporter</title>
+  <link rel="stylesheet" href="styles.css">
+<!--  <style>-->
+<!--    /* Borders for the TRE table */-->
+<!--    #tre-table { border: 1px solid #cbd5e1; border-collapse: collapse; }-->
+<!--    #tre-table th, #tre-table td { border: 1px solid #cbd5e1; padding: .5rem .75rem; }-->
+<!--    #tre-table thead th { background: #f8fafc; }-->
+<!--  </style>-->
+</head>
+<body class="tre-theme">
+  <main class="container">
+    <h1>Trecom Reporter</h1>
+
+    <form id="tre-form" class="card" style="margin-bottom: 1rem;">
+      <fieldset style="border: none; padding: 0; margin: 0; display: flex; gap: .75rem; align-items: end; flex-wrap: wrap; justify-content: flex-end">
+        <div class="form-control">
+          <label for="year">Rok</label>
+          <input type="number" id="year" name="year" min="2000" max="9999" required />
+        </div>
+        <div class="form-control">
+          <label for="month">Miesiąc</label>
+          <input type="number" id="month" name="month" min="1" max="12" required />
+        </div>
+        <div class="form-control">
+          <button type="submit" class="tre-form-btn">Pobierz raport</button>
+        </div>
+      </fieldset>
+    </form>
+
+    <section id="messages" aria-live="polite" style="min-height: 1.25rem; margin-bottom: .5rem;"></section>
+
+    <section class="card">
+      <div style="overflow-x:auto;">
+        <table id="tre-table" class="table" style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="text-align:center;">Firma</th>
+              <th style="text-align:center;">Opis</th>
+              <th style="text-align:center;">Godziny</th>
+              <th style="text-align:center;">Handlowiec</th>
+              <th style="text-align:center;">Notatki</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- wiersze zostaną dodane dynamicznie -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <nav style="margin-top: 1rem;">
+      <ul>
+        <li><a href="index.html">← Powrót do strony głównej</a></li>
+      </ul>
+    </nav>
+
+    <div class="footer">Trecom</div>
+  </main>
+
+  <script>
+    (function() {
+      const $ = (sel, root=document) => root.querySelector(sel);
+      const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+      const form = document.getElementById('tre-form');
+      const yearInput = document.getElementById('year');
+      const monthInput = document.getElementById('month');
+      const tableBody = document.querySelector('#tre-table tbody');
+      const messages = document.getElementById('messages');
+
+      function setMessage(text, type = 'info') {
+        messages.textContent = text || '';
+        messages.className = type;
+      }
+
+      function setDefaultsToCurrentMonth() {
+        const now = new Date();
+        yearInput.value = now.getFullYear();
+        monthInput.value = now.getMonth() + 1; // 1-12
+      }
+
+      function clearTable() {
+        tableBody.innerHTML = '';
+      }
+
+      function renderRows(rows) {
+        clearTable();
+        if (!rows || rows.length === 0) {
+          setMessage('Brak danych dla wybranego miesiąca.', 'info');
+          return;
+        }
+        const frag = document.createDocumentFragment();
+        rows.forEach(item => {
+          const tr = document.createElement('tr');
+
+          const tdCompany = document.createElement('td');
+          tdCompany.textContent = item.company ?? '';
+          tr.appendChild(tdCompany);
+
+          const tdDesc = document.createElement('td');
+          tdDesc.textContent = item.description ?? '';
+          tr.appendChild(tdDesc);
+
+          const tdHours = document.createElement('td');
+          tdHours.style.textAlign = 'right';
+          tdHours.textContent = item.hours != null ? item.hours : '';
+          tr.appendChild(tdHours);
+
+          const tdSales = document.createElement('td');
+          tdSales.textContent = item.salesman ?? '';
+          tr.appendChild(tdSales);
+
+          const tdNotes = document.createElement('td');
+          tdNotes.textContent = item.notes ?? '';
+          tr.appendChild(tdNotes);
+
+          frag.appendChild(tr);
+        });
+        tableBody.appendChild(frag);
+      }
+
+      async function fetchReport(year, month) {
+        const url = `/reporter/tre?year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`;
+        setMessage('Ładowanie...', 'info');
+
+        try {
+          const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+          if (!res.ok) {
+            const text = await res.text();
+            throw new Error(`Błąd ${res.status}: ${text || res.statusText}`);
+          }
+          const data = await res.json();
+          setMessage('');
+          renderRows(data);
+        } catch (e) {
+          console.error(e);
+          setMessage(`Nie udało się pobrać danych: ${e.message}`, 'error');
+          clearTable();
+        }
+      }
+
+      form.addEventListener('submit', (ev) => {
+        ev.preventDefault();
+        const year = parseInt(yearInput.value, 10);
+        const month = parseInt(monthInput.value, 10);
+        if (!year || !month || month < 1 || month > 12) {
+          setMessage('Podaj poprawny rok i miesiąc (1-12).', 'error');
+          return;
+        }
+        fetchReport(year, month);
+      });
+
+      // Init defaults and auto-load current month on page load
+      setDefaultsToCurrentMonth();
+      fetchReport(parseInt(yearInput.value, 10), parseInt(monthInput.value, 10));
+    })();
+  </script>
+</body>
+</html>

@@ -7,12 +7,15 @@ import cloud.cholewa.reporter.raport.tre.repository.TreRaportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Slf4j
 @Service
@@ -45,15 +48,29 @@ public class TreService {
 
     public Mono<List<TreResponse>> getReport(final int year, final int month) {
         return treRaportRepository.findAllByDate(LocalDate.of(year, month, 1))
-            .doOnNext(entity -> log.info("Report found in database: {}", entity.getCustomer()))
-            .map(entity -> TreResponse.builder()
-                .date(entity.getCreated().toString())
-                .company(entity.getCustomer())
-                .description(entity.getDescription())
-                .hours(entity.getHours())
-                .salesman(entity.getSalesmanLastName() + " " + entity.getSalesmanFirstName())
-                .notes(entity.getNotes())
-                .build())
+            .doOnNext(logReportedRecord())
+            .map(mapToTreResponse())
             .collectList();
+    }
+
+    @NotNull
+    private static Function<TreRaportEntity, TreResponse> mapToTreResponse() {
+        return entity -> TreResponse.builder()
+            .date(entity.getCreated().toString())
+            .company(entity.getCustomer())
+            .description(entity.getDescription())
+            .hours(entity.getHours())
+            .salesman(entity.getSalesmanLastName() + " " + entity.getSalesmanFirstName())
+            .notes(entity.getNotes())
+            .build();
+    }
+
+    @NotNull
+    private static Consumer<TreRaportEntity> logReportedRecord() {
+        return entity -> log.info(
+            "Report found in database: date: {}, customer: {}",
+            entity.getCreated(),
+            entity.getCustomer()
+        );
     }
 }

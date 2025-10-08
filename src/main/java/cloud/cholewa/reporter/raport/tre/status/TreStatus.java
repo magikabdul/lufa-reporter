@@ -9,6 +9,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TreStatus {
 
-    private boolean isStatusReported;
-    private boolean inProgress;
+    private TreStatusType status;
+
+    public enum TreStatusType {
+        REPORTED,
+        NOT_REPORTED,
+        IN_PROGRESS,
+        SKIPPED
+    }
 }

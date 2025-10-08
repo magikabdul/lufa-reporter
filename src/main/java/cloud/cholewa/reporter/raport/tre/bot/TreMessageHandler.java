@@ -13,6 +13,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+import static cloud.cholewa.reporter.raport.tre.status.TreStatus.TreStatusType.IN_PROGRESS;
+import static cloud.cholewa.reporter.raport.tre.status.TreStatus.TreStatusType.NOT_REPORTED;
+import static cloud.cholewa.reporter.raport.tre.status.TreStatus.TreStatusType.REPORTED;
+import static cloud.cholewa.reporter.raport.tre.status.TreStatus.TreStatusType.SKIPPED;
 import static io.github.natanimn.telebof.enums.ParseMode.MARKDOWN;
 
 @Slf4j
@@ -41,8 +45,21 @@ public class TreMessageHandler {
             """
                 `/start` - rozpoczyna wprowadzanie raportu
                 `/cancel` - anuluje wprowadzanie raportu
+                `/skip` - pomija krok wprowadzania raportu dla danego dnia
                 """
         ).exec();
+    }
+
+    @MessageHandler(commands = "skip")
+    void handleSkip(final BotContext ctx, final Message message) {
+        log.info("Skip command received: {}", message.text);
+        treStatus.setStatus(SKIPPED);
+    }
+
+    @MessageHandler(commands = "cancel")
+    void handleCancel(final BotContext ctx, final Message message) {
+        log.info("Chancel command received: {}", message.text);
+        treStatus.setStatus(NOT_REPORTED);
     }
 
     @MessageHandler(commands = "start")
@@ -51,7 +68,7 @@ public class TreMessageHandler {
 
         if (raportContext != null) {
             log.info("Raport preparation started");
-            treStatus.setInProgress(true);
+            treStatus.setStatus(IN_PROGRESS);
 
             ctx.sendMessage(
                 message.chat.id,
@@ -158,8 +175,7 @@ public class TreMessageHandler {
                     ctx.sendMessage(message.chat.id, "Raport zapisany").exec();
                     ctx.clearState(message.chat.id);
                     raportContext = null;
-                    treStatus.setInProgress(false);
-                    treStatus.setStatusReported(true);
+                    treStatus.setStatus(REPORTED);
                 })
                 .subscribe();
         } else {
@@ -167,22 +183,7 @@ public class TreMessageHandler {
             ctx.sendMessage(message.chat.id, "Raport odrzucony").exec();
             ctx.clearState(message.chat.id);
             raportContext = null;
-            treStatus.setInProgress(false);
-        }
-    }
-
-    @MessageHandler(commands = "end")
-    void handleEnd(final BotContext ctx, Message message) {
-        log.info("Finishing of the report for Tre");
-
-        if (raportContext == null) {
-            ctx.sendMessage(
-                message.chat.id,
-                """
-                    Nie zostały podane wszystkie informacje potrzebne do wprowadzania raportu.
-                    Jeżeli chcesz przerwać wprowadzanie raportu, wpisz `/cancel`.
-                    """
-            ).parseMode(MARKDOWN).exec();
+            treStatus.setStatus(NOT_REPORTED);
         }
     }
 }

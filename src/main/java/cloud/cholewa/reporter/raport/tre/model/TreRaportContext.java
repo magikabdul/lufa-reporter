@@ -3,13 +3,13 @@ package cloud.cholewa.reporter.raport.tre.model;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @RequiredArgsConstructor
 public class TreRaportContext {
 
-    private final LocalDateTime createdDate;
+    private final LocalDate createdDate;
 
     private String customer;
     private String description;

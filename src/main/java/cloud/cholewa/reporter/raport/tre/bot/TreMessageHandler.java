@@ -10,8 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.LocalDate;
 
 import static cloud.cholewa.reporter.raport.tre.status.TreStatus.TreStatusType.IN_PROGRESS;
 import static cloud.cholewa.reporter.raport.tre.status.TreStatus.TreStatusType.NOT_REPORTED;
@@ -78,7 +77,7 @@ public class TreMessageHandler {
                     """
             ).parseMode(MARKDOWN).exec();
         } else {
-            raportContext = new TreRaportContext(LocalDateTime.now(ZoneId.of("Europe/Warsaw")));
+            raportContext = new TreRaportContext(LocalDate.now());
             log.info("Raport preparation started at: {}", raportContext.getCreatedDate());
             ctx.sendMessage(message.chat.id, "Podaj nazwę klienta, dla którego wprowadzasz raport").exec();
             ctx.setState(message.chat.id, COMPANY);

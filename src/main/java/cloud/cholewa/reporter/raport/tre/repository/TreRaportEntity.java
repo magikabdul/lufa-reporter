@@ -8,7 +8,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.lang.Nullable;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Table("tre")
@@ -19,7 +19,7 @@ public class TreRaportEntity {
 
     @Column("created_at")
     @NotNull
-    private LocalDateTime created;
+    private LocalDate created;
 
     @NotNull
     @Column("customer_name")

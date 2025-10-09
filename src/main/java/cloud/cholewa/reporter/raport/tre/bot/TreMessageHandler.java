@@ -35,7 +35,7 @@ public class TreMessageHandler {
     private final TreStatus treStatus;
     private final TreService treService;
 
-    private TreRaportContext raportContext;
+    private TreRaportContext reportContext;
 
     @MessageHandler(commands = "help")
     void handleHelp(final BotContext ctx, Message message) {
@@ -66,7 +66,7 @@ public class TreMessageHandler {
     void handleStart(final BotContext ctx, final Message message) {
         log.info("Start command received: {}", message.text);
 
-        if (raportContext != null) {
+        if (reportContext != null) {
             log.info("Raport preparation started");
             treStatus.setStatus(IN_PROGRESS);
 
@@ -78,8 +78,8 @@ public class TreMessageHandler {
                     """
             ).parseMode(MARKDOWN).exec();
         } else {
-            raportContext = new TreRaportContext(LocalDate.now());
-            log.info("Raport preparation started at: {}", raportContext.getCreatedDate());
+            reportContext = new TreRaportContext(LocalDate.now());
+            log.info("Raport preparation started at: {}", reportContext.getCreatedDate());
             ctx.sendMessage(message.chat.id, "Podaj nazwę klienta, dla którego wprowadzasz raport").exec();
             ctx.setState(message.chat.id, COMPANY);
         }
@@ -91,7 +91,7 @@ public class TreMessageHandler {
         ctx.sendMessage(message.chat.id, "Podaj opis wykonanych czynności").exec();
         ctx.setState(message.chat.id, DESCRIPTION);
         ctx.getStateData(message.chat.id).put(COMPANY, message.text);
-        raportContext.setCustomer(message.text);
+        reportContext.setCustomer(message.text);
     }
 
     @MessageHandler(state = DESCRIPTION)
@@ -100,7 +100,7 @@ public class TreMessageHandler {
         ctx.sendMessage(message.chat.id, "Podaj ilość spędzonych godzin").exec();
         ctx.setState(message.chat.id, HOURS);
         ctx.getStateData(message.chat.id).put(DESCRIPTION, message.text);
-        raportContext.setDescription(message.text);
+        reportContext.setDescription(message.text);
     }
 
     @MessageHandler(state = HOURS)
@@ -109,7 +109,7 @@ public class TreMessageHandler {
         ctx.sendMessage(message.chat.id, "Podaj imię handlowca").exec();
         ctx.setState(message.chat.id, FIRSTNAME);
         ctx.getStateData(message.chat.id).put(HOURS, message.text);
-        raportContext.setHours(Integer.parseInt(message.text));
+        reportContext.setHours(Integer.parseInt(message.text));
     }
 
     @MessageHandler(state = FIRSTNAME)
@@ -118,14 +118,14 @@ public class TreMessageHandler {
         ctx.sendMessage(message.chat.id, "Podaj nazwisko handlowca").exec();
         ctx.setState(message.chat.id, LASTNAME);
         ctx.getStateData(message.chat.id).put(FIRSTNAME, message.text);
-        raportContext.setSalesmanFirstName(message.text);
+        reportContext.setSalesmanFirstName(message.text);
     }
 
     @MessageHandler(state = LASTNAME)
     void handleLastname(final BotContext ctx, final Message message) {
         log.info("Salesman's lastname received: {}", message.text);
         ctx.getStateData(message.chat.id).put(LASTNAME, message.text);
-        raportContext.setSalesmanLastName(message.text);
+        reportContext.setSalesmanLastName(message.text);
         ctx.sendMessage(
                 message.chat.id, "Opcjonalnie podaj dodatkowe informacje.\nWpisz `n` jeżeli pomijasz ten krok.")
             .parseMode(MARKDOWN).exec();
@@ -137,7 +137,7 @@ public class TreMessageHandler {
         log.info("Notes received: {}", message.text);
         if (!message.text.equalsIgnoreCase("n")) {
             ctx.getStateData(message.chat.id).put(NOTES, message.text);
-            raportContext.setNotes(message.text);
+            reportContext.setNotes(message.text);
         }
 
         ctx.sendMessage(
@@ -170,11 +170,11 @@ public class TreMessageHandler {
     void handleConfirm(final BotContext ctx, final Message message) {
         if (message.text.equalsIgnoreCase("y")) {
 
-            treService.saveReport(raportContext)
+            treService.saveReport(reportContext)
                 .doOnSuccess(unused -> {
                     ctx.sendMessage(message.chat.id, "Raport zapisany").exec();
                     ctx.clearState(message.chat.id);
-                    raportContext = null;
+                    reportContext = null;
                     treStatus.setStatus(REPORTED);
                 })
                 .subscribe();
@@ -182,7 +182,7 @@ public class TreMessageHandler {
             log.info("Provided report discarded");
             ctx.sendMessage(message.chat.id, "Raport odrzucony").exec();
             ctx.clearState(message.chat.id);
-            raportContext = null;
+            reportContext = null;
             treStatus.setStatus(NOT_REPORTED);
         }
     }

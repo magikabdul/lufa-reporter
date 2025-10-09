@@ -6,8 +6,8 @@ import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
 
-public interface TreRaportRepository extends R2dbcRepository<TreRaportEntity, Long> {
+public interface TreReportRepository extends R2dbcRepository<TreReportEntity, Long> {
 
     @Query("SELECT * FROM tre WHERE created_at >= DATE_TRUNC('month', :date) AND created_at < DATE_TRUNC('month', :date) + INTERVAL '1 month'")
-    Flux<TreRaportEntity> findAllByDate(LocalDate date);
+    Flux<TreReportEntity> findAllByDate(LocalDate date);
 }

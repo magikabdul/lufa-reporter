@@ -2,8 +2,8 @@ package cloud.cholewa.reporter.raport.tre.service;
 
 import cloud.cholewa.reporter.raport.tre.api.TreResponse;
 import cloud.cholewa.reporter.raport.tre.model.TreRaportContext;
-import cloud.cholewa.reporter.raport.tre.repository.TreRaportEntity;
-import cloud.cholewa.reporter.raport.tre.repository.TreRaportRepository;
+import cloud.cholewa.reporter.raport.tre.repository.TreReportEntity;
+import cloud.cholewa.reporter.raport.tre.repository.TreReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -22,39 +22,39 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class TreService {
 
-    private final TreRaportRepository treRaportRepository;
+    private final TreReportRepository treReportRepository;
 
     public Mono<Void> saveReport(final TreRaportContext raport) {
         return Mono.just(mapToEntity(raport))
-            .flatMap(treRaportRepository::save)
+            .flatMap(treReportRepository::save)
             .doOnNext(entity -> log.info("Report saved to database"))
             .then();
     }
 
-    private static TreRaportEntity mapToEntity(final TreRaportContext raport) {
-        final TreRaportEntity treRaportEntity = new TreRaportEntity();
-        treRaportEntity.setCreated(raport.getCreatedDate());
-        treRaportEntity.setCustomer(raport.getCustomer().toUpperCase(Locale.ROOT));
-        treRaportEntity.setDescription(StringUtils.capitalize(raport.getDescription().toLowerCase(Locale.ROOT)));
-        treRaportEntity.setHours(raport.getHours());
-        treRaportEntity.setSalesmanFirstName(StringUtils.capitalize(raport.getSalesmanFirstName().toLowerCase(Locale.ROOT)));
-        treRaportEntity.setSalesmanLastName(StringUtils.capitalize(raport.getSalesmanLastName().toLowerCase(Locale.ROOT)));
+    private static TreReportEntity mapToEntity(final TreRaportContext raport) {
+        final TreReportEntity treReportEntity = new TreReportEntity();
+        treReportEntity.setCreated(raport.getCreatedDate());
+        treReportEntity.setCustomer(raport.getCustomer().toUpperCase(Locale.ROOT));
+        treReportEntity.setDescription(StringUtils.capitalize(raport.getDescription().toLowerCase(Locale.ROOT)));
+        treReportEntity.setHours(raport.getHours());
+        treReportEntity.setSalesmanFirstName(StringUtils.capitalize(raport.getSalesmanFirstName().toLowerCase(Locale.ROOT)));
+        treReportEntity.setSalesmanLastName(StringUtils.capitalize(raport.getSalesmanLastName().toLowerCase(Locale.ROOT)));
         if (raport.getNotes() != null) {
-            treRaportEntity.setNotes(StringUtils.capitalize(raport.getNotes().toLowerCase(Locale.ROOT)));
+            treReportEntity.setNotes(StringUtils.capitalize(raport.getNotes().toLowerCase(Locale.ROOT)));
         }
 
-        return treRaportEntity;
+        return treReportEntity;
     }
 
     public Mono<List<TreResponse>> getReport(final int year, final int month) {
-        return treRaportRepository.findAllByDate(LocalDate.of(year, month, 1))
+        return treReportRepository.findAllByDate(LocalDate.of(year, month, 1))
             .doOnNext(logReportedRecord())
             .map(mapToTreResponse())
             .collectList();
     }
 
     @NotNull
-    private static Function<TreRaportEntity, TreResponse> mapToTreResponse() {
+    private static Function<TreReportEntity, TreResponse> mapToTreResponse() {
         return entity -> TreResponse.builder()
             .date(entity.getCreated().toString())
             .company(entity.getCustomer())
@@ -66,7 +66,7 @@ public class TreService {
     }
 
     @NotNull
-    private static Consumer<TreRaportEntity> logReportedRecord() {
+    private static Consumer<TreReportEntity> logReportedRecord() {
         return entity -> log.info(
             "Report found in database: date: {}, customer: {}",
             entity.getCreated(),

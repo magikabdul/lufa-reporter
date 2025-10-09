@@ -12,7 +12,7 @@ import java.time.LocalDate;
 
 @Data
 @Table("tre")
-public class TreRaportEntity {
+public class TreReportEntity {
 
     @Id
     private Long id;

@@ -21,6 +21,7 @@ import static io.github.natanimn.telebof.enums.ParseMode.MARKDOWN;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class TreMessageHandler {
 
     private static final String COMPANY = "company";

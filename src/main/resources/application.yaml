@@ -18,6 +18,14 @@ spring:
     enabled: true
   jpa:
     show-sql: true
+  ai:
+    openai:
+      api-key: ${openai-api-key:dummyKey}
+      chat:
+        options:
+          model: gpt-5
+          temperature: 1
+          max-completion-tokens: 4096
 
 telegram:
   url: https://api.telegram.org

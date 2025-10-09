@@ -1,6 +1,6 @@
 package cloud.cholewa.reporter.raport.tre.bot;
 
-import cloud.cholewa.reporter.raport.tre.model.TreRaportContext;
+import cloud.cholewa.reporter.raport.tre.model.TreReportContext;
 import cloud.cholewa.reporter.raport.tre.service.TreService;
 import cloud.cholewa.reporter.raport.tre.status.TreStatus;
 import io.github.natanimn.telebof.BotContext;
@@ -35,7 +35,7 @@ public class TreMessageHandler {
     private final TreStatus treStatus;
     private final TreService treService;
 
-    private TreRaportContext reportContext;
+    private TreReportContext reportContext;
 
     @MessageHandler(commands = "help")
     void handleHelp(final BotContext ctx, Message message) {
@@ -78,7 +78,7 @@ public class TreMessageHandler {
                     """
             ).parseMode(MARKDOWN).exec();
         } else {
-            reportContext = new TreRaportContext(LocalDate.now());
+            reportContext = new TreReportContext(LocalDate.now());
             log.info("Raport preparation started at: {}", reportContext.getCreatedDate());
             ctx.sendMessage(message.chat.id, "Podaj nazwę klienta, dla którego wprowadzasz raport").exec();
             ctx.setState(message.chat.id, COMPANY);

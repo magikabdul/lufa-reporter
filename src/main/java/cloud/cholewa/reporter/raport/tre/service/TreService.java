@@ -1,7 +1,7 @@
 package cloud.cholewa.reporter.raport.tre.service;
 
 import cloud.cholewa.reporter.raport.tre.api.TreResponse;
-import cloud.cholewa.reporter.raport.tre.model.TreRaportContext;
+import cloud.cholewa.reporter.raport.tre.model.TreReportContext;
 import cloud.cholewa.reporter.raport.tre.repository.TreReportEntity;
 import cloud.cholewa.reporter.raport.tre.repository.TreReportRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +24,14 @@ public class TreService {
 
     private final TreReportRepository treReportRepository;
 
-    public Mono<Void> saveReport(final TreRaportContext raport) {
+    public Mono<Void> saveReport(final TreReportContext raport) {
         return Mono.just(mapToEntity(raport))
             .flatMap(treReportRepository::save)
             .doOnNext(entity -> log.info("Report saved to database"))
             .then();
     }
 
-    private static TreReportEntity mapToEntity(final TreRaportContext raport) {
+    private static TreReportEntity mapToEntity(final TreReportContext raport) {
         final TreReportEntity treReportEntity = new TreReportEntity();
         treReportEntity.setCreated(raport.getCreatedDate());
         treReportEntity.setCustomer(raport.getCustomer().toUpperCase(Locale.ROOT));

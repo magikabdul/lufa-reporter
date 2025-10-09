@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Data
 @RequiredArgsConstructor
-public class TreRaportContext {
+public class TreReportContext {
 
     private final LocalDate createdDate;
 

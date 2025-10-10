@@ -67,7 +67,7 @@ public class TreMessageHandler {
         log.info("Start command received: {}", message.text);
 
         if (reportContext != null) {
-            log.info("Raport preparation started");
+            log.info("Report for Trecom preparation in progress");
             treStatus.setStatus(IN_PROGRESS);
 
             ctx.sendMessage(
@@ -144,7 +144,8 @@ public class TreMessageHandler {
                 message.chat.id,
                 String.format(
                     """
-                        #Wprowadzono następujące informacje
+                        #Wprowadzono następujące informacje#
+                        
                         *Nazwa klienta*: %s
                         *Opis*: %s
                         *Ilość godzin*: %s

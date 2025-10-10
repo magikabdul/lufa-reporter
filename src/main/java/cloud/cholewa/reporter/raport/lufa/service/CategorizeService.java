@@ -26,7 +26,7 @@ public class CategorizeService {
                 .call()
                 .content()
             )
-            .doOnSubscribe(subscription -> log.info("Starting categorize for message: ..."))
+            .doOnSubscribe(subscription -> log.info("Starting categorize message ..."))
             .doOnNext(response -> log.info("Response is: {}", response.replace("\n", "")))
             .map(mapper::map)
             .subscribeOn(Schedulers.boundedElastic())

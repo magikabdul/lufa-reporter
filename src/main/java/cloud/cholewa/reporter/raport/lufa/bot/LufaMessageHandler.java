@@ -2,6 +2,7 @@ package cloud.cholewa.reporter.raport.lufa.bot;
 
 import cloud.cholewa.reporter.raport.lufa.model.LufaReportContext;
 import cloud.cholewa.reporter.raport.lufa.service.CategorizeService;
+import cloud.cholewa.reporter.raport.lufa.service.LufaService;
 import cloud.cholewa.reporter.telegram.model.StatusType;
 import io.github.natanimn.telebof.BotContext;
 import io.github.natanimn.telebof.annotations.MessageHandler;
@@ -23,6 +24,7 @@ import static cloud.cholewa.reporter.telegram.model.StatusType.SKIPPED;
 public class LufaMessageHandler {
 
     private final CategorizeService categorizeService;
+    private final LufaService lufaService;
 
     private StatusType status;
     private LufaReportContext raport;
@@ -77,14 +79,20 @@ public class LufaMessageHandler {
     void handleDescription(final BotContext ctx, final Message message) {
         log.info("Task description received: {}", message.text);
 
+        ctx.sendMessage(message.chat.id, "Typ zadania wysłany do AI, trwa określanie typu zadania ...").exec();
+
         categorizeService.categorize(message.text)
             .map(taskChatResponse -> {
                 raport.setCategory(taskChatResponse.getCategory());
                 raport.setDescription(taskChatResponse.getDescription());
                 return raport;
             })
+            .doOnNext(reportContext -> processConfirmationState(ctx, message))
             .subscribe();
 
+    }
+
+    private void processConfirmationState(final BotContext ctx, final Message message) {
         ctx.sendMessage(
             message.chat.id,
             String.format(
@@ -99,7 +107,7 @@ public class LufaMessageHandler {
                 raport.getCategory(),
                 raport.getDescription()
             )
-        );
+        ).exec();
         ctx.setState(message.chat.id, "CONFIRM");
     }
 
@@ -107,6 +115,9 @@ public class LufaMessageHandler {
     void handleConfirm(final BotContext ctx, final Message message) {
         if (message.text.equalsIgnoreCase("y")) {
             log.info("Confirmed report");
+
+            lufaService.saveReport(raport).subscribe();
+
             ctx.sendMessage(message.chat.id, "Raport zapisany").exec();
             ctx.clearState(message.chat.id);
             raport = null;

@@ -17,7 +17,13 @@ public class NotifyLufaSchedule {
 
     @Scheduled(cron = "0 0 21 * * *", zone = "Europe/Warsaw")
     void sendNotification() {
-        log.info("Podaj informację nad jakimi taskami pracowałeś dzisiaj");
-        telegramClient.sendMessage(LUFA, "Podaj informację nad jakimi taskami pracowałeś dzisiaj").subscribe();
+        log.info("Sending notification to LufaBot about today tasks");
+        telegramClient.sendMessage(
+            LUFA, """
+                Podaj informację nad jakimi taskami pracowałeś dzisiaj
+                Rozpocznij wprowadzanie raportu podając polecenie `/start`.
+                Jeżeli chcesz pominąć ten krok, wpisz `/skip`.
+                """
+        ).subscribe();
     }
 }

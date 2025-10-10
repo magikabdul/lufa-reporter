@@ -1,0 +1,122 @@
+package cloud.cholewa.reporter.raport.lufa.bot;
+
+import cloud.cholewa.reporter.raport.lufa.model.LufaReportContext;
+import cloud.cholewa.reporter.raport.lufa.service.CategorizeService;
+import cloud.cholewa.reporter.telegram.model.StatusType;
+import io.github.natanimn.telebof.BotContext;
+import io.github.natanimn.telebof.annotations.MessageHandler;
+import io.github.natanimn.telebof.types.updates.Message;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+
+import static cloud.cholewa.reporter.telegram.model.StatusType.NOT_REPORTED;
+import static cloud.cholewa.reporter.telegram.model.StatusType.REPORTED;
+import static cloud.cholewa.reporter.telegram.model.StatusType.SKIPPED;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@SuppressWarnings("unused")
+public class LufaMessageHandler {
+
+    private final CategorizeService categorizeService;
+
+    private StatusType status;
+    private LufaReportContext raport;
+
+    @MessageHandler(commands = "help")
+    void handleHelp(final BotContext ctx, final Message message) {
+        log.info("Help command received");
+        ctx.sendMessage(
+            message.chat.id,
+            """
+                `/start` - rozpoczyna wprowadzanie raportu
+                `/cancel` - anuluje wprowadzanie raportu
+                `/skip` - pomija krok wprowadzania raportu dla danego dnia
+                """
+        ).exec();
+    }
+
+    @MessageHandler(commands = "skip")
+    void handleSkip(final BotContext ctx, final Message message) {
+        log.info("Skip command received: {}", message.text);
+        status = SKIPPED;
+    }
+
+    @MessageHandler(commands = "cancel")
+    void handleCancel(final BotContext ctx, final Message message) {
+        log.info("Cancel command received: {}", message.text);
+        status = NOT_REPORTED;
+    }
+
+    @MessageHandler(commands = "start")
+    void handleStart(final BotContext ctx, final Message message) {
+        log.info("Start command received: {}", message.text);
+
+        if (raport != null) {
+            log.info("Report for Lufthansa preparation in progress");
+            ctx.sendMessage(
+                message.chat.id,
+                """
+                    Dotychczasowe wprowadzanie raportu nie zostało zakończone.
+                    Jeżeli chcesz go zakończyć wpisz `/cancel`.
+                    """
+            ).exec();
+        } else {
+            raport = new LufaReportContext(LocalDate.now());
+            log.info("Report for Lufthansa preparation started at: {}", raport.getCreatedDate());
+            ctx.sendMessage(message.chat.id, "Podaj opis zadania, nad którym pracowałeś").exec();
+            ctx.setState(message.chat.id, "DESCRIPTION");
+        }
+    }
+
+    @MessageHandler(state = "DESCRIPTION")
+    void handleDescription(final BotContext ctx, final Message message) {
+        log.info("Task description received: {}", message.text);
+
+        categorizeService.categorize(message.text)
+            .map(taskChatResponse -> {
+                raport.setCategory(taskChatResponse.getCategory());
+                raport.setDescription(taskChatResponse.getDescription());
+                return raport;
+            })
+            .subscribe();
+
+        ctx.sendMessage(
+            message.chat.id,
+            String.format(
+                """
+                    #Status raportu#
+                    
+                    *Typ zadania*: %s
+                    *Opis*: %s
+                    
+                    **Potwierdzenie zapisu (y/n)**
+                    """,
+                raport.getCategory(),
+                raport.getDescription()
+            )
+        );
+        ctx.setState(message.chat.id, "CONFIRM");
+    }
+
+    @MessageHandler(state = "CONFIRM")
+    void handleConfirm(final BotContext ctx, final Message message) {
+        if (message.text.equalsIgnoreCase("y")) {
+            log.info("Confirmed report");
+            ctx.sendMessage(message.chat.id, "Raport zapisany").exec();
+            ctx.clearState(message.chat.id);
+            raport = null;
+            status = REPORTED;
+        } else {
+            log.info("Rejected report");
+            ctx.sendMessage(message.chat.id, "Raport odrzucony").exec();
+            ctx.clearState(message.chat.id);
+            raport = null;
+            status = NOT_REPORTED;
+        }
+    }
+}

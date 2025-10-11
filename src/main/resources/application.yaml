@@ -36,6 +36,10 @@ telegram:
     token: ${telegram-token:dummyToken}
     chatId: ${telegram-chatId:dummyChatId}
 
+logging:
+  level:
+    cloud.cholewa: debug
+
 ---
 
 spring:

@@ -7,9 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import static cloud.cholewa.reporter.raport.tre.status.TreStatus.TreStatusType.NOT_REPORTED;
-import static cloud.cholewa.reporter.raport.tre.status.TreStatus.TreStatusType.REPORTED;
-import static cloud.cholewa.reporter.raport.tre.status.TreStatus.TreStatusType.SKIPPED;
+import static cloud.cholewa.reporter.telegram.model.StatusType.NOT_REPORTED;
+import static cloud.cholewa.reporter.telegram.model.StatusType.REPORTED;
+import static cloud.cholewa.reporter.telegram.model.StatusType.SKIPPED;
 import static cloud.cholewa.reporter.telegram.model.VendorName.TRE;
 
 @Slf4j
@@ -38,10 +38,12 @@ public class NotifyTreSchedule {
 
     @Scheduled(cron = "0 0/30 21-23 * * *", zone = "Europe/Warsaw")
     void resendNotification() {
+
         if (treStatus.getStatus() == null) {
             return;
         }
-        if (!treStatus.getStatus().equals(REPORTED) && !treStatus.getStatus().equals(SKIPPED)) {
+
+        if (treStatus.getStatus() != REPORTED && treStatus.getStatus() != SKIPPED) {
             log.info("Resend notification to Tre with report request while is was not reported today");
 
             telegramClient

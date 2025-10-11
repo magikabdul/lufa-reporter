@@ -2,8 +2,8 @@ package cloud.cholewa.reporter.raport.lufa.bot;
 
 import cloud.cholewa.reporter.raport.lufa.model.LufaReportContext;
 import cloud.cholewa.reporter.raport.lufa.service.CategorizeService;
+import cloud.cholewa.reporter.raport.lufa.service.LufaReportStatus;
 import cloud.cholewa.reporter.raport.lufa.service.LufaService;
-import cloud.cholewa.reporter.telegram.model.StatusType;
 import io.github.natanimn.telebof.BotContext;
 import io.github.natanimn.telebof.annotations.MessageHandler;
 import io.github.natanimn.telebof.types.updates.Message;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
+import static cloud.cholewa.reporter.telegram.model.StatusType.IN_PROGRESS;
 import static cloud.cholewa.reporter.telegram.model.StatusType.NOT_REPORTED;
 import static cloud.cholewa.reporter.telegram.model.StatusType.REPORTED;
 import static cloud.cholewa.reporter.telegram.model.StatusType.SKIPPED;
@@ -23,10 +24,10 @@ import static cloud.cholewa.reporter.telegram.model.StatusType.SKIPPED;
 @SuppressWarnings("unused")
 public class LufaMessageHandler {
 
+    private final LufaReportStatus status;
     private final CategorizeService categorizeService;
     private final LufaService lufaService;
 
-    private StatusType status;
     private LufaReportContext raport;
 
     @MessageHandler(commands = "help")
@@ -45,13 +46,13 @@ public class LufaMessageHandler {
     @MessageHandler(commands = "skip")
     void handleSkip(final BotContext ctx, final Message message) {
         log.info("Skip command received: {}", message.text);
-        status = SKIPPED;
+        status.setStatus(SKIPPED);
     }
 
     @MessageHandler(commands = "cancel")
     void handleCancel(final BotContext ctx, final Message message) {
         log.info("Cancel command received: {}", message.text);
-        status = NOT_REPORTED;
+        status.setStatus(NOT_REPORTED);
     }
 
     @MessageHandler(commands = "start")
@@ -60,6 +61,7 @@ public class LufaMessageHandler {
 
         if (raport != null) {
             log.info("Report for Lufthansa preparation in progress");
+            status.setStatus(IN_PROGRESS);
             ctx.sendMessage(
                 message.chat.id,
                 """
@@ -121,13 +123,13 @@ public class LufaMessageHandler {
             ctx.sendMessage(message.chat.id, "Raport zapisany").exec();
             ctx.clearState(message.chat.id);
             raport = null;
-            status = REPORTED;
+            status.setStatus(REPORTED);
         } else {
             log.info("Rejected report");
             ctx.sendMessage(message.chat.id, "Raport odrzucony").exec();
             ctx.clearState(message.chat.id);
             raport = null;
-            status = NOT_REPORTED;
+            status.setStatus(NOT_REPORTED);
         }
     }
 }

@@ -1,5 +1,8 @@
 package cloud.cholewa.reporter.raport.lufa.model;
 
+import lombok.Getter;
+
+@Getter
 public enum TaskCategory {
 
     SOFTWARE_DEVELOPMENT("Projektowanie i testowanie oprogramowania w odgórnie ustalonym czasie zgodnie wymaganiami biznesowymi."),
@@ -14,9 +17,5 @@ public enum TaskCategory {
 
     TaskCategory(String description) {
         this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
     }
 }

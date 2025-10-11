@@ -1,4 +1,4 @@
-package cloud.cholewa.reporter.raport.tre.status;
+package cloud.cholewa.reporter.raport.lufa.service;
 
 import cloud.cholewa.reporter.telegram.model.StatusType;
 import lombok.Data;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @RequiredArgsConstructor
-public class TreStatus {
+public class LufaReportStatus {
 
     private StatusType status;
 }

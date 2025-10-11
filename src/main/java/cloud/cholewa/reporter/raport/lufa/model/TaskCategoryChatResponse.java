@@ -3,7 +3,7 @@ package cloud.cholewa.reporter.raport.lufa.model;
 import lombok.Data;
 
 @Data
-public class TaskChatResponse {
+public class TaskCategoryChatResponse {
 
     private TaskCategory category;
     private String description;

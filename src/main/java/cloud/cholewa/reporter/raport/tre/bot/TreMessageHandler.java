@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-import static cloud.cholewa.reporter.raport.tre.status.TreStatus.TreStatusType.IN_PROGRESS;
-import static cloud.cholewa.reporter.raport.tre.status.TreStatus.TreStatusType.NOT_REPORTED;
-import static cloud.cholewa.reporter.raport.tre.status.TreStatus.TreStatusType.REPORTED;
-import static cloud.cholewa.reporter.raport.tre.status.TreStatus.TreStatusType.SKIPPED;
+import static cloud.cholewa.reporter.telegram.model.StatusType.IN_PROGRESS;
+import static cloud.cholewa.reporter.telegram.model.StatusType.NOT_REPORTED;
+import static cloud.cholewa.reporter.telegram.model.StatusType.REPORTED;
+import static cloud.cholewa.reporter.telegram.model.StatusType.SKIPPED;
 import static io.github.natanimn.telebof.enums.ParseMode.MARKDOWN;
 
 @Slf4j

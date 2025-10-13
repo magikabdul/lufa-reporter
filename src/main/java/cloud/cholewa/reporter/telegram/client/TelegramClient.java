@@ -29,7 +29,7 @@ public class TelegramClient {
                 .build())
             .retrieve()
             .bodyToMono(Void.class)
-            .doOnSuccess(empty -> log.info("Message sent to client {}", vendorName.name()));
+            .doOnSuccess(empty -> log.info("Message sent to [{}] bot", vendorName.name()));
     }
 
     private String getChatId(final VendorName vendorName) {

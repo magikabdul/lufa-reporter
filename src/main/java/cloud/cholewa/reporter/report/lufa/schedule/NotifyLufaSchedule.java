@@ -1,6 +1,6 @@
 package cloud.cholewa.reporter.report.lufa.schedule;
 
-import cloud.cholewa.reporter.report.lufa.service.LufaReportStatus;
+import cloud.cholewa.reporter.report.lufa.model.LufaReportStatus;
 import cloud.cholewa.reporter.telegram.client.TelegramClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

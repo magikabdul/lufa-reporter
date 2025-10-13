@@ -1,4 +1,4 @@
-package cloud.cholewa.reporter.report.lufa.service;
+package cloud.cholewa.reporter.report.lufa.model;
 
 import cloud.cholewa.reporter.telegram.model.StatusType;
 import lombok.Data;

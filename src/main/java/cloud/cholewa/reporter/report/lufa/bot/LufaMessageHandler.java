@@ -2,8 +2,8 @@ package cloud.cholewa.reporter.report.lufa.bot;
 
 import cloud.cholewa.reporter.report.lufa.model.LufaReportContext;
 import cloud.cholewa.reporter.report.lufa.service.CategorizeService;
-import cloud.cholewa.reporter.report.lufa.service.LufaReportStatus;
-import cloud.cholewa.reporter.report.lufa.service.LufaService;
+import cloud.cholewa.reporter.report.lufa.model.LufaReportStatus;
+import cloud.cholewa.reporter.report.lufa.service.LufaReportService;
 import io.github.natanimn.telebof.BotContext;
 import io.github.natanimn.telebof.annotations.MessageHandler;
 import io.github.natanimn.telebof.types.updates.Message;
@@ -24,16 +24,16 @@ import static cloud.cholewa.reporter.telegram.model.StatusType.SKIPPED;
 @SuppressWarnings("unused")
 public class LufaMessageHandler {
 
-    private static final String COMMAND_START = "START";
-    private static final String COMMAND_HELP = "HELP";
-    private static final String COMMAND_SKIP = "SKIP";
-    private static final String COMMAND_CANCEL = "CANCEL";
-    private static final String STATE_DESCRIPTION = "DESCRIPTION";
-    private static final String STATE_CONFIRM = "CONFIRM";
+    private static final String COMMAND_START = "start";
+    private static final String COMMAND_HELP = "help";
+    private static final String COMMAND_SKIP = "skip";
+    private static final String COMMAND_CANCEL = "cancel";
+    private static final String STATE_DESCRIPTION = "description";
+    private static final String STATE_CONFIRM = "confirm";
 
     private final LufaReportStatus status;
     private final CategorizeService categorizeService;
-    private final LufaService lufaService;
+    private final LufaReportService lufaReportService;
 
     private LufaReportContext raport;
 
@@ -125,7 +125,7 @@ public class LufaMessageHandler {
         if (message.text.equalsIgnoreCase("y")) {
             log.info("Confirmed report");
 
-            lufaService.saveReport(raport).subscribe();
+            lufaReportService.saveReport(raport).subscribe();
 
             ctx.sendMessage(message.chat.id, "Raport zapisany").exec();
             ctx.clearState(message.chat.id);

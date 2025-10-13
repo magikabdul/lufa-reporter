@@ -1,6 +1,6 @@
 package cloud.cholewa.reporter.report.lufa.api;
 
-import cloud.cholewa.reporter.report.lufa.service.LufaService;
+import cloud.cholewa.reporter.report.lufa.service.LufaReportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +18,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LufaController {
 
-    private final LufaService lufaService;
+    private final LufaReportService lufaReportService;
 
     @GetMapping
     Mono<ResponseEntity<List<LufaReportResponse>>> getLufaReport(
         @RequestParam final int year,
         @RequestParam final int month
     ) {
-        return lufaService.prepareReport(year, month)
-            .map(ResponseEntity::ok);
+        return lufaReportService.prepareReport(year, month)
+            .filter(reports -> !reports.isEmpty())
+            .map(ResponseEntity::ok)
+            .switchIfEmpty(Mono.just(ResponseEntity.noContent().build()));
     }
 }

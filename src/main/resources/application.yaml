@@ -26,6 +26,10 @@ spring:
           model: gpt-5
           temperature: 1
           max-completion-tokens: 4096
+          timeout: 120s
+          connect-timeout: 60s
+          read-timeout: 120s
+
 
 telegram:
   url: https://api.telegram.org

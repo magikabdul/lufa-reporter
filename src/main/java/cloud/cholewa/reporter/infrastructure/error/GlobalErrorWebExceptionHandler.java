@@ -48,7 +48,7 @@ public class GlobalErrorWebExceptionHandler extends AbstractErrorWebExceptionHan
 
     /*
     * Method overrode to not have a log for the parent method.
-    * Only logging from default processor is required
+    * Only logging from the default processor is required
      */
     @Override
     protected void logError(final ServerRequest request, final ServerResponse response, final Throwable throwable) {

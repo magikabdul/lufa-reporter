@@ -173,6 +173,7 @@ public class TreMessageHandler {
 
             treService.saveReport(reportContext)
                 .doOnSuccess(unused -> {
+                    log.info("Report saved");
                     ctx.sendMessage(message.chat.id, "Raport zapisany").exec();
                     ctx.clearState(message.chat.id);
                     reportContext = null;

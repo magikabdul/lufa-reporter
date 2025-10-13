@@ -9,7 +9,8 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ExceptionMessage {
 
-    private String code;
+    private int errorCode;
+    private String errorType;
     private String title;
     private String detail;
 

@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWe
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -45,9 +46,20 @@ public class GlobalErrorWebExceptionHandler extends AbstractErrorWebExceptionHan
         return RouterFunctions.route(RequestPredicates.all(), this::renderErrorResponse);
     }
 
+    /*
+    * Method overrode to not have a log for the parent method.
+    * Only logging from default processor is required
+     */
+    @Override
+    protected void logError(final ServerRequest request, final ServerResponse response, final Throwable throwable) {
+        //log.error("Error processing request [{}]: {}", request.uri(), throwable.getLocalizedMessage());
+    }
+
     Mono<ServerResponse> renderErrorResponse(final ServerRequest request) {
+        final ExceptionMessage exceptionMessage = getExceptionMessage(getError(request));
+
         return ServerResponse
-            .status(0)
+            .status(HttpStatus.valueOf(Objects.requireNonNull(exceptionMessage).getErrorCode()))
             .contentType(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(Objects.requireNonNull(getExceptionMessage(getError(request)))));
     }

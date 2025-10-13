@@ -21,7 +21,10 @@ public class LufaController {
     private final LufaService lufaService;
 
     @GetMapping
-    Mono<ResponseEntity<List<LufaReportResponse>>> getLufaReport(@RequestParam final int year, @RequestParam final int month) {
+    Mono<ResponseEntity<List<LufaReportResponse>>> getLufaReport(
+        @RequestParam final int year,
+        @RequestParam final int month
+    ) {
         return lufaService.prepareReport(year, month)
             .map(ResponseEntity::ok);
     }

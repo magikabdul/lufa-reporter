@@ -24,13 +24,20 @@ import static cloud.cholewa.reporter.telegram.model.StatusType.SKIPPED;
 @SuppressWarnings("unused")
 public class LufaMessageHandler {
 
+    private static final String COMMAND_START = "START";
+    private static final String COMMAND_HELP = "HELP";
+    private static final String COMMAND_SKIP = "SKIP";
+    private static final String COMMAND_CANCEL = "CANCEL";
+    private static final String STATE_DESCRIPTION = "DESCRIPTION";
+    private static final String STATE_CONFIRM = "CONFIRM";
+
     private final LufaReportStatus status;
     private final CategorizeService categorizeService;
     private final LufaService lufaService;
 
     private LufaReportContext raport;
 
-    @MessageHandler(commands = "help")
+    @MessageHandler(commands = COMMAND_START)
     void handleHelp(final BotContext ctx, final Message message) {
         log.info("Help command received");
         ctx.sendMessage(
@@ -43,19 +50,19 @@ public class LufaMessageHandler {
         ).exec();
     }
 
-    @MessageHandler(commands = "skip")
+    @MessageHandler(commands = COMMAND_SKIP)
     void handleSkip(final BotContext ctx, final Message message) {
         log.info("Skip command received: {}", message.text);
         status.setStatus(SKIPPED);
     }
 
-    @MessageHandler(commands = "cancel")
+    @MessageHandler(commands = COMMAND_CANCEL)
     void handleCancel(final BotContext ctx, final Message message) {
         log.info("Cancel command received: {}", message.text);
         status.setStatus(NOT_REPORTED);
     }
 
-    @MessageHandler(commands = "start")
+    @MessageHandler(commands = COMMAND_START)
     void handleStart(final BotContext ctx, final Message message) {
         log.info("Start command received: {}", message.text);
 
@@ -73,11 +80,11 @@ public class LufaMessageHandler {
             raport = new LufaReportContext(LocalDate.now());
             log.info("Report for Lufthansa preparation started at: {}", raport.getCreatedDate());
             ctx.sendMessage(message.chat.id, "Podaj opis zadania, nad którym pracowałeś").exec();
-            ctx.setState(message.chat.id, "DESCRIPTION");
+            ctx.setState(message.chat.id, STATE_DESCRIPTION);
         }
     }
 
-    @MessageHandler(state = "DESCRIPTION")
+    @MessageHandler(state = STATE_DESCRIPTION)
     void handleDescription(final BotContext ctx, final Message message) {
         log.info("Task description received: {}", message.text);
 
@@ -110,10 +117,10 @@ public class LufaMessageHandler {
                 raport.getDescription()
             )
         ).exec();
-        ctx.setState(message.chat.id, "CONFIRM");
+        ctx.setState(message.chat.id, STATE_CONFIRM);
     }
 
-    @MessageHandler(state = "CONFIRM")
+    @MessageHandler(state = STATE_CONFIRM)
     void handleConfirm(final BotContext ctx, final Message message) {
         if (message.text.equalsIgnoreCase("y")) {
             log.info("Confirmed report");

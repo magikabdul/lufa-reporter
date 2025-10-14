@@ -44,7 +44,10 @@ public class NotifyTreSchedule {
         }
 
         if (treStatus.getStatus() != REPORTED && treStatus.getStatus() != SKIPPED) {
-            log.info("Resend notification to Tre with report request while is was not reported today");
+            log.info(
+                "Resend notification to Tre with report request while is was not reported today, status: {}",
+                treStatus.getStatus()
+            );
 
             telegramClient
                 .sendMessage(

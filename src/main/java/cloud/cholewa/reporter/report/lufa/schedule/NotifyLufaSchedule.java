@@ -44,7 +44,10 @@ public class NotifyLufaSchedule {
         }
 
         if (status.getStatus() != REPORTED && status.getStatus() != SKIPPED) {
-            log.info("Resending notification to LufaBot about today tasks while it was not reported today");
+            log.info(
+                "Resending notification to LufaBot about today tasks while it was not reported today, status: {}",
+                status.getStatus()
+            );
 
             telegramClient
                 .sendMessage(

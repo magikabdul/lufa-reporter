@@ -54,6 +54,7 @@ public class LufaMessageHandler {
     void handleSkip(final BotContext ctx, final Message message) {
         log.info("Skip command received: {}", message.text);
         status.setStatus(SKIPPED);
+        ctx.sendMessage(message.chat.id, "Pomijano krok wprowadzania raportu").exec();
     }
 
     @MessageHandler(commands = COMMAND_CANCEL)
@@ -107,10 +108,10 @@ public class LufaMessageHandler {
             String.format(
                 """
                     #Status raportu#
-                    
+
                     *Typ zadania*: %s
                     *Opis*: %s
-                    
+
                     **Potwierdzenie zapisu (y/n)**
                     """,
                 raport.getCategory(),

@@ -27,5 +27,6 @@ public class TreBot {
         final BotClient treBot = new BotClient(telegramConfig.getTre().getToken());
         treBot.addHandler(treMessageHandler);
         treBot.startPolling();
+        treBot.context.clearState(Long.parseLong(telegramConfig.getTre().getChatId()));
     }
 }

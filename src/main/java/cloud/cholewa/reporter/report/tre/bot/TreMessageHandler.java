@@ -54,6 +54,7 @@ public class TreMessageHandler {
     void handleSkip(final BotContext ctx, final Message message) {
         log.info("Skip command received: {}", message.text);
         treStatus.setStatus(SKIPPED);
+        ctx.sendMessage(message.chat.id, "Pomijano krok wprowadzania raportu").exec();
     }
 
     @MessageHandler(commands = "cancel")

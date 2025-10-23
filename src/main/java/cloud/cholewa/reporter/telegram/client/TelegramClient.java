@@ -1,14 +1,14 @@
 package cloud.cholewa.reporter.telegram.client;
 
 import cloud.cholewa.reporter.config.TelegramConfig;
-import cloud.cholewa.reporter.telegram.model.VendorName;
+import cloud.cholewa.reporter.model.VendorName;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import static cloud.cholewa.reporter.telegram.model.VendorName.LUFA;
+import static cloud.cholewa.reporter.model.VendorName.LUFA;
 
 @Slf4j
 @Component

@@ -44,6 +44,7 @@
 		<maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
 		<maven-tidy-plugin.version>1.4.0</maven-tidy-plugin.version>
 		<maven-versions-plugin.version>2.19.1</maven-versions-plugin.version>
+		<discord4j-core.version>3.3.0</discord4j-core.version>
 	</properties>
 
 	<dependencies>
@@ -97,6 +98,11 @@
 					<artifactId>guava</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.discord4j</groupId>
+			<artifactId>discord4j-core</artifactId>
+			<version>${discord4j-core.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

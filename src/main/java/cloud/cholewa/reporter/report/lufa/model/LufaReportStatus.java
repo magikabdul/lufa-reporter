@@ -1,6 +1,6 @@
 package cloud.cholewa.reporter.report.lufa.model;
 
-import cloud.cholewa.reporter.telegram.model.StatusType;
+import cloud.cholewa.reporter.model.StatusType;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

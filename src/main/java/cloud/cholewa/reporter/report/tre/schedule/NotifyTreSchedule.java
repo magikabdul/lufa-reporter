@@ -7,10 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import static cloud.cholewa.reporter.telegram.model.StatusType.NOT_REPORTED;
-import static cloud.cholewa.reporter.telegram.model.StatusType.REPORTED;
-import static cloud.cholewa.reporter.telegram.model.StatusType.SKIPPED;
-import static cloud.cholewa.reporter.telegram.model.VendorName.TRE;
+import static cloud.cholewa.reporter.model.StatusType.NOT_REPORTED;
+import static cloud.cholewa.reporter.model.StatusType.REPORTED;
+import static cloud.cholewa.reporter.model.StatusType.SKIPPED;
+import static cloud.cholewa.reporter.model.VendorName.TRE;
 
 @Slf4j
 @Component

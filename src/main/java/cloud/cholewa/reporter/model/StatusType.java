@@ -1,4 +1,4 @@
-package cloud.cholewa.reporter.telegram.model;
+package cloud.cholewa.reporter.model;
 
 public enum StatusType {
     REPORTED,

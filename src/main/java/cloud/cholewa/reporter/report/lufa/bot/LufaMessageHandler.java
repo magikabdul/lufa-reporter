@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-import static cloud.cholewa.reporter.telegram.model.StatusType.IN_PROGRESS;
-import static cloud.cholewa.reporter.telegram.model.StatusType.NOT_REPORTED;
-import static cloud.cholewa.reporter.telegram.model.StatusType.REPORTED;
-import static cloud.cholewa.reporter.telegram.model.StatusType.SKIPPED;
+import static cloud.cholewa.reporter.model.StatusType.IN_PROGRESS;
+import static cloud.cholewa.reporter.model.StatusType.NOT_REPORTED;
+import static cloud.cholewa.reporter.model.StatusType.REPORTED;
+import static cloud.cholewa.reporter.model.StatusType.SKIPPED;
 
 @Slf4j
 @Service

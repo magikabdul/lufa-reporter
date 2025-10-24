@@ -40,6 +40,14 @@ telegram:
     token: ${telegram-token:dummyToken}
     chatId: ${telegram-chatId:dummyChatId}
 
+discord:
+  lufa:
+    token: ${discord-token:dummyToken}
+    channelId: ${discord-channelId:dummyChannelId}
+  tre:
+    token: ${discord-token:dummyToken}
+    channelId: ${discord-channelId:dummyChannelId}
+
 logging:
   level:
     cloud.cholewa: debug

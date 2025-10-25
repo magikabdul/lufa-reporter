@@ -3,7 +3,6 @@ package cloud.cholewa.reporter.report.lufa.service;
 import cloud.cholewa.reporter.report.lufa.ai.ReportPrompt;
 import cloud.cholewa.reporter.report.lufa.api.LufaReportResponse;
 import cloud.cholewa.reporter.report.lufa.mapper.LufaReportEntityMapper;
-import cloud.cholewa.reporter.report.lufa.model.LufaReportContext;
 import cloud.cholewa.reporter.report.lufa.model.TaskCategory;
 import cloud.cholewa.reporter.report.lufa.repository.LufaReportEntity;
 import cloud.cholewa.reporter.report.lufa.repository.LufaReportRepository;
@@ -25,12 +24,12 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LufaReportService {
+public class ReportService {
 
     private final LufaReportRepository repository;
     private final ChatClient chatClient;
 
-    public Mono<Void> saveReport(final LufaReportContext reportContext) {
+    public Mono<Void> saveReport(final DailyReportContext reportContext) {
         return repository.save(LufaReportEntityMapper.mapToEntity(reportContext))
             .subscribeOn(Schedulers.boundedElastic())
             .doOnNext(entity -> log.info("Report saved to database"))

@@ -12,17 +12,17 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-import static cloud.cholewa.reporter.model.StatusType.IN_PROGRESS;
-import static cloud.cholewa.reporter.model.StatusType.NOT_REPORTED;
-import static cloud.cholewa.reporter.model.StatusType.REPORTED;
-import static cloud.cholewa.reporter.model.StatusType.SKIPPED;
+import static cloud.cholewa.reporter.model.ReportingStatus.IN_PROGRESS;
+import static cloud.cholewa.reporter.model.ReportingStatus.NOT_REPORTED;
+import static cloud.cholewa.reporter.model.ReportingStatus.REPORTED;
+import static cloud.cholewa.reporter.model.ReportingStatus.SKIPPED;
 import static io.github.natanimn.telebof.enums.ParseMode.MARKDOWN;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @SuppressWarnings("unused")
-public class TreMessageHandler {
+public class MessageProcessor {
 
     private static final String COMPANY = "company";
     private static final String DESCRIPTION = "description";

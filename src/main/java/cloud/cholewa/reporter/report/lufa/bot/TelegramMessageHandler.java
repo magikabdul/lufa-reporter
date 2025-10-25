@@ -1,9 +1,9 @@
 package cloud.cholewa.reporter.report.lufa.bot;
 
-import cloud.cholewa.reporter.report.lufa.model.LufaReportContext;
+import cloud.cholewa.reporter.report.lufa.service.DailyReportContext;
 import cloud.cholewa.reporter.report.lufa.service.CategorizeService;
 import cloud.cholewa.reporter.report.lufa.model.LufaReportStatus;
-import cloud.cholewa.reporter.report.lufa.service.LufaReportService;
+import cloud.cholewa.reporter.report.lufa.service.ReportService;
 import io.github.natanimn.telebof.BotContext;
 import io.github.natanimn.telebof.annotations.MessageHandler;
 import io.github.natanimn.telebof.types.updates.Message;
@@ -13,16 +13,16 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-import static cloud.cholewa.reporter.model.StatusType.IN_PROGRESS;
-import static cloud.cholewa.reporter.model.StatusType.NOT_REPORTED;
-import static cloud.cholewa.reporter.model.StatusType.REPORTED;
-import static cloud.cholewa.reporter.model.StatusType.SKIPPED;
+import static cloud.cholewa.reporter.model.ReportingStatus.IN_PROGRESS;
+import static cloud.cholewa.reporter.model.ReportingStatus.NOT_REPORTED;
+import static cloud.cholewa.reporter.model.ReportingStatus.REPORTED;
+import static cloud.cholewa.reporter.model.ReportingStatus.SKIPPED;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @SuppressWarnings("unused")
-public class LufaMessageHandler {
+public class TelegramMessageHandler {
 
     private static final String COMMAND_START = "start";
     private static final String COMMAND_HELP = "help";
@@ -33,9 +33,9 @@ public class LufaMessageHandler {
 
     private final LufaReportStatus status;
     private final CategorizeService categorizeService;
-    private final LufaReportService lufaReportService;
+    private final ReportService reportService;
 
-    private LufaReportContext raport;
+    private DailyReportContext raport;
 
     @MessageHandler(commands = COMMAND_START)
     void handleHelp(final BotContext ctx, final Message message) {
@@ -78,7 +78,7 @@ public class LufaMessageHandler {
                     """
             ).exec();
         } else {
-            raport = new LufaReportContext(LocalDate.now());
+            raport = new DailyReportContext(LocalDate.now());
             log.info("Report for Lufthansa preparation started at: {}", raport.getCreatedDate());
             ctx.sendMessage(message.chat.id, "Podaj opis zadania, nad którym pracowałeś").exec();
             ctx.setState(message.chat.id, STATE_DESCRIPTION);
@@ -126,7 +126,7 @@ public class LufaMessageHandler {
         if (message.text.equalsIgnoreCase("y")) {
             log.info("Confirmed report");
 
-            lufaReportService.saveReport(raport).subscribe();
+            reportService.saveReport(raport).subscribe();
 
             ctx.sendMessage(message.chat.id, "Raport zapisany").exec();
             ctx.clearState(message.chat.id);

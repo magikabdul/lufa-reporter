@@ -7,9 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import static cloud.cholewa.reporter.model.StatusType.NOT_REPORTED;
-import static cloud.cholewa.reporter.model.StatusType.REPORTED;
-import static cloud.cholewa.reporter.model.StatusType.SKIPPED;
+import static cloud.cholewa.reporter.model.ReportingStatus.NOT_REPORTED;
+import static cloud.cholewa.reporter.model.ReportingStatus.REPORTED;
+import static cloud.cholewa.reporter.model.ReportingStatus.SKIPPED;
 import static cloud.cholewa.reporter.model.VendorName.TRE;
 
 @Slf4j

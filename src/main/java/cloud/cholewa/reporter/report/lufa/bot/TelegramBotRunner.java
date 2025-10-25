@@ -14,17 +14,17 @@ import org.springframework.stereotype.Component;
 @Component
 @Profile("reporter")
 @RequiredArgsConstructor
-public class LufaBot {
+public class TelegramBotRunner {
 
     private final TelegramConfig telegramConfig;
-    private final LufaMessageHandler lufaMessageHandler;
+    private final TelegramMessageHandler telegramMessageHandler;
 
     @Async
     @EventListener(ApplicationReadyEvent.class)
     public void start() {
         log.debug("Lufa bot started and waiting for commands");
         final BotClient lufaBot = new BotClient(telegramConfig.getLufa().getToken());
-        lufaBot.addHandler(lufaMessageHandler);
+        lufaBot.addHandler(telegramMessageHandler);
         lufaBot.startPolling();
         lufaBot.context.clearState(Long.parseLong(telegramConfig.getLufa().getChatId()));
     }

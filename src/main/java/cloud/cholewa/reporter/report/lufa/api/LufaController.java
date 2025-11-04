@@ -1,8 +1,9 @@
 package cloud.cholewa.reporter.report.lufa.api;
 
-import cloud.cholewa.reporter.model.ReportingStatus;
-import cloud.cholewa.reporter.report.lufa.service.ReportHandlerService;
-import cloud.cholewa.reporter.report.lufa.service.ReportService;
+import cloud.cholewa.reporter.report.lufa.model.ReportResponse;
+import cloud.cholewa.reporter.report.lufa.model.ReportStatusResponse;
+import cloud.cholewa.reporter.report.lufa.service.ReportCreatorService;
+import cloud.cholewa.reporter.report.lufa.service.ReportSubmittingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,27 +22,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LufaController {
 
-    private final ReportService reportService;
-    private final ReportHandlerService reportHandlerService;
+    private final ReportSubmittingService reportSubmittingService;
+    private final ReportCreatorService reportCreatorService;
 
     @GetMapping
-    Mono<ResponseEntity<List<LufaReportResponse>>> getLufaReport(
+    Mono<ResponseEntity<List<ReportResponse>>> getLufaReport(
         @RequestParam final int year,
         @RequestParam final int month
     ) {
-        return reportService.prepareReport(year, month)
+        return reportCreatorService.prepareReport(year, month)
             .filter(reports -> !reports.isEmpty())
             .map(ResponseEntity::ok)
             .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.OK)
-                .body(List.of(LufaReportResponse.builder()
+                .body(List.of(ReportResponse.builder()
                     .description("No records in data base for: " + year + "-" + month)
                     .build()))
             ));
     }
 
     @GetMapping("status")
-    Mono<ResponseEntity<ReportingStatus>> getReportDailyStatus() {
-        return reportHandlerService.getDailyReportStatus()
+    Mono<ResponseEntity<ReportStatusResponse>> getReportDailyStatus() {
+        return reportSubmittingService.getDailyReportStatus()
             .doOnNext(status -> log.info("Report status: {}", status))
             .map(ResponseEntity::ok);
     }

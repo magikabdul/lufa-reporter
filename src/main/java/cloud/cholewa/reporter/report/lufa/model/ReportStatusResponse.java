@@ -1,14 +1,11 @@
 package cloud.cholewa.reporter.report.lufa.model;
 
 import cloud.cholewa.reporter.model.ReportingStatus;
+import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @Data
-@Component
-@RequiredArgsConstructor
-public class LufaReportStatus {
-
+@Builder
+public class ReportStatusResponse {
     private ReportingStatus status;
 }

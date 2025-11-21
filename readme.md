@@ -1,5 +1,6 @@
 
 [![CI](https://github.com/magikabdul/lufa-reporter/actions/workflows/CI.yaml/badge.svg)](https://github.com/magikabdul/lufa-reporter/actions/workflows/CI.yaml)
+[![SonarQube](https://github.com/magikabdul/lufa-reporter/actions/workflows/build.yml/badge.svg)](https://github.com/magikabdul/lufa-reporter/actions/workflows/build.yml)
 ![GitHub Release Date - Published_At](https://img.shields.io/github/release-date/magikabdul/lufa-reporter?style=plastic)
 ![GitHub Release](https://img.shields.io/github/v/release/magikabdul/lufa-reporter?style=plastic)
 

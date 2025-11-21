@@ -25,7 +25,7 @@ public class CategorizePrompt {
         7.  Nazwa: ARCHITECTURE_DESIGN,
             Opis: Analiza i projektowanie architektury oprogramowania w zleconych projektach.
         
-        Na podstawie opisu zadania dopasuje je do jednej z kategorii.
+        Na podstawie opisu zadania dopasuj je do jednej z kategorii.
         Nie wymyślaj innych kategorii niż podane.
         
         Zwróć odpowiedź w formacie json zawierającym tylko:

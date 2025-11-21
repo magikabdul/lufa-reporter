@@ -8,9 +8,14 @@ import java.time.LocalDate;
 
 @Data
 @RequiredArgsConstructor
-class DailyReportContext {
+public class DailyReportContext {
 
     private final LocalDate createdDate;
     private TaskCategory category;
     private String description;
+    private State state;
+
+    public enum State {
+        STARTED, DESCRIPTION, CONFIRMATION, SUBMITTED;
+    }
 }

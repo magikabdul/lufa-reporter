@@ -1,7 +1,7 @@
 package cloud.cholewa.reporter.report.lufa.mapper;
 
-import cloud.cholewa.reporter.report.lufa.service.DailyReportContext;
 import cloud.cholewa.reporter.report.lufa.repository.LufaReportEntity;
+import cloud.cholewa.reporter.report.lufa.service.DailyReportContext;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

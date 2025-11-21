@@ -1,7 +1,8 @@
 package cloud.cholewa.reporter.report.lufa.schedule;
 
 import cloud.cholewa.reporter.report.lufa.bot.discord.DiscordService;
-import cloud.cholewa.reporter.report.lufa.service.ReportHandlerService;
+import cloud.cholewa.reporter.report.lufa.service.ReportCreatorService;
+import cloud.cholewa.reporter.report.lufa.service.ReportSubmittingService;
 import cloud.cholewa.reporter.telegram.client.TelegramClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,15 +14,15 @@ import static cloud.cholewa.reporter.model.VendorName.LUFA;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class NotifyLufaSchedule {
+public class NotifySchedule {
 
     private final TelegramClient telegramClient;
-    private final ReportHandlerService reportHandlerService;
+    private final ReportSubmittingService reportSubmittingService;
     private final DiscordService discordService;
 
     @Scheduled(cron = "0 0 21 * * *", zone = "Europe/Warsaw")
     void sendNotification() {
-        reportHandlerService.initReport()
+        reportSubmittingService.initReport()
             .doOnSuccess(ignore -> log.info("Sending notification to Telegram LufaBot about reporting today tasks"))
             .then(telegramClient.sendMessage(
                     LUFA,
@@ -44,7 +45,7 @@ public class NotifyLufaSchedule {
 
     @Scheduled(cron = "0 0/30 22-23 * * *", zone = "Europe/Warsaw")
     void resendNotification() {
-        reportHandlerService.shouldResendNotification()
+        reportSubmittingService.shouldResendNotification()
             .filter(shouldResend -> shouldResend)
             .doOnNext(shouldResend -> log.info(
                 "Resending notification to LufaBot about today tasks while it was not reported today"))

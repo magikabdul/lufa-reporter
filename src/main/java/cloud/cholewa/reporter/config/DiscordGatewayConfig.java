@@ -16,6 +16,9 @@ public class DiscordGatewayConfig {
     GatewayDiscordClient lufaDiscordClient() {
         return DiscordClientBuilder.create(discordConfig.getLufa().getToken())
             .build()
+//            .gateway().withEventDispatcher(MessageCreateEvent.class, event -> {
+//
+//            })
             .login().block();
     }
 

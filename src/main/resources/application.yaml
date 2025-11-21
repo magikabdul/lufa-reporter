@@ -23,8 +23,8 @@ spring:
       api-key: ${openai-api-key:dummyKey}
       chat:
         options:
-          model: gpt-5
-          temperature: 1
+          model: gpt-4o-mini
+          temperature: 0.8
           max-completion-tokens: 4096
           timeout: 120s
           connect-timeout: 60s

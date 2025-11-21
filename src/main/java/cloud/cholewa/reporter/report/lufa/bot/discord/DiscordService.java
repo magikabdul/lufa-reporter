@@ -25,4 +25,6 @@ public class DiscordService {
             .flatMap(channel -> channel.createMessage(message))
             .doOnSuccess(success -> log.info("Clear text message sent to Discord"));
     }
+
+//    Mono<Void> handleMessage = lufaDiscordClient.
 }

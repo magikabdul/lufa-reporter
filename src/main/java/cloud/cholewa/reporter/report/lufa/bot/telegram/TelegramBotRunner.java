@@ -1,4 +1,4 @@
-package cloud.cholewa.reporter.report.lufa.bot;
+package cloud.cholewa.reporter.report.lufa.bot.telegram;
 
 import cloud.cholewa.reporter.config.TelegramConfig;
 import io.github.natanimn.telebof.BotClient;
@@ -17,14 +17,14 @@ import org.springframework.stereotype.Component;
 public class TelegramBotRunner {
 
     private final TelegramConfig telegramConfig;
-    private final TelegramMessageHandler telegramMessageHandler;
+    private final TelegramMessageProcessor telegramMessageProcessor;
 
     @Async
     @EventListener(ApplicationReadyEvent.class)
     public void start() {
-        log.debug("Lufa bot started and waiting for commands");
+        log.debug("Lufa Telegram bot started and is waiting for commands");
         final BotClient lufaBot = new BotClient(telegramConfig.getLufa().getToken());
-        lufaBot.addHandler(telegramMessageHandler);
+        lufaBot.addHandler(telegramMessageProcessor);
         lufaBot.startPolling();
         lufaBot.context.clearState(Long.parseLong(telegramConfig.getLufa().getChatId()));
     }
